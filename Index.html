@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Happy Birthday, My Love!</title>
+    <style>
+        /* CSS Styling */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #ffe6e6 0%, #ffb3c6 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: #333;
+            overflow-x: hidden;
+            padding: 15px;
+        }
+
+        .card-container {
+            background-color: white;
+            width: 100%;
+            max-width: 420px;
+            padding: 40px 25px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            text-align: center;
+            position: relative;
+        }
+
+        h1 {
+            color: #d81b60;
+            margin-bottom: 10px;
+            font-size: 1.8rem;
+        }
+        
+        .names {
+            color: #ad144b;
+            font-size: 1.25rem;
+            margin-bottom: 15px;
+            font-weight: 600;
+            line-height: 1.4;
+        }
+
+        p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: #555;
+            margin-bottom: 25px;
+        }
+
+        .emoji-display {
+            font-size: 80px;
+            margin: 20px 0;
+        }
+
+        /* Wish Input Field */
+        .wish-input {
+            width: 100%;
+            padding: 12px 15px;
+            font-size: 1rem;
+            border: 2px solid #ffb3c6;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            outline: none;
+            color: #333;
+            transition: border-color 0.3s;
+        }
+
+        .wish-input:focus {
+            border-color: #d81b60;
+        }
+
+        /* Button Styling */
+        button {
+            background-color: #d81b60;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.1rem;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: transform 0.2s, background-color 0.2s;
+            width: 100%;
+            max-width: 250px;
+            touch-action: manipulation; 
+            margin-top: 10px;
+        }
+
+        button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        button:hover:not(:disabled) {
+            background-color: #ad144b;
+            transform: scale(1.05);
+        }
+
+        /* Views */
+        #cake-view, #success-view, #gallery-view {
+            display: none; 
+        }
+
+        /* Gallery Grid */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 10px;
+            margin-top: 20px;
+            max-height: 300px;
+            overflow-y: auto;
+            padding: 5px;
+        }
+
+        .gallery-grid img {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+
+        .gallery-grid img:hover {
+            transform: scale(1.05);
+        }
+
+        .loading-text {
+            color: #d81b60;
+            font-weight: bold;
+            font-style: italic;
+        }
+
+        /* Animations */
+        @keyframes popIn {
+            0% { transform: scale(0.8); opacity: 0; }
+            80% { transform: scale(1.05); opacity: 1; }
+            100% { transform: scale(1); }
+        }
+
+        .pop-animation {
+            animation: popIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        .bounce-emoji {
+            animation: bounce 2s infinite ease-in-out;
+        }
+
+        @media (max-width: 380px) {
+            h1 { font-size: 1.5rem; }
+            .names { font-size: 1.1rem; }
+            p { font-size: 1rem; }
+            .emoji-display { font-size: 65px; }
+            .card-container { padding: 30px 15px; }
+            button { padding: 12px 25px; font-size: 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card-container">
+        
+        <div id="oven-view">
+            <h1>Special Delivery!</h1>
+            <p>I know you're the master baker around here, but I decided to try my hand at it today...</p>
+            <div class="emoji-display">🎛️</div>
+            <button id="bake-btn">Open the Oven</button>
+        </div>
+
+        <div id="cake-view">
+            <h1>Happy Birthday!</h1>
+            <div class="names">Kosisochukwu, Favour, Purity, Christabel<br>❤️ My Love ❤️</div>
+            <div class="emoji-display bounce-emoji">🎂</div>
+            <p>Close your eyes, make a wish, and type it below!</p>
+            <input type="text" id="wish-input" class="wish-input" placeholder="Type your secret wish here...">
+            <button id="wish-btn">Blow out the candles! 🌬️</button>
+        </div>
+
+        <div id="success-view">
+            <h1>Wish Sent to the Stars! ✨</h1>
+            <div class="emoji-display pop-animation">💌</div>
+            <p>Your wish has been securely locked in my database and my heart. Wishing you a year filled with sweetness, success, and all your dreams coming true!</p>
+            <button id="gallery-btn">See Our Memories 📸</button>
+        </div>
+
+        <div id="gallery-view">
+            <h1>Our Memories</h1>
+            <p>A few moments of my favorite baker.</p>
+            <div id="gallery-container" class="gallery-grid">
+                </div>
+        </div>
+
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
+        import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBv-vk-BSuUpl-Z_CXiNDPMjbapSI8QMUg",
+            authDomain: "birthday-12304.firebaseapp.com",
+            projectId: "birthday-12304",
+            storageBucket: "birthday-12304.firebasestorage.app",
+            messagingSenderId: "1079650933305",
+            appId: "1:1079650933305:web:df9021e2e885eede288be8",
+            measurementId: "G-BW8Y1086NT"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // UI Elements
+        const ovenView = document.getElementById('oven-view');
+        const cakeView = document.getElementById('cake-view');
+        const successView = document.getElementById('success-view');
+        const galleryView = document.getElementById('gallery-view');
+        const galleryContainer = document.getElementById('gallery-container');
+        
+        const bakeBtn = document.getElementById('bake-btn');
+        const wishBtn = document.getElementById('wish-btn');
+        const galleryBtn = document.getElementById('gallery-btn');
+        const wishInput = document.getElementById('wish-input');
+
+        // 1. Oven to Cake
+        bakeBtn.addEventListener('click', () => {
+            ovenView.style.display = 'none';
+            cakeView.style.display = 'block';
+            cakeView.classList.add('pop-animation');
+        });
+
+        // 2. Submit Wish to Firestore
+        wishBtn.addEventListener('click', async () => {
+            const userWish = wishInput.value.trim();
+            if(!userWish) {
+                alert("Please type a wish first!");
+                return;
+            }
+
+            wishBtn.innerText = "Sending... ✨";
+            wishBtn.disabled = true;
+
+            try {
+                // Save to Firestore 'wishes' collection
+                await addDoc(collection(db, "wishes"), {
+                    wish: userWish,
+                    timestamp: new Date()
+                });
+                
+                cakeView.style.display = 'none';
+                successView.style.display = 'block';
+                successView.classList.add('pop-animation');
+            } catch (error) {
+                console.error("Error saving wish: ", error);
+                alert("Oops! Something went wrong saving your wish. But I still heard it!");
+                wishBtn.innerText = "Blow out the candles! 🌬️";
+                wishBtn.disabled = false;
+            }
+        });
+
+        // 3. Fetch Pictures from Firestore
+        galleryBtn.addEventListener('click', async () => {
+            successView.style.display = 'none';
+            galleryView.style.display = 'block';
+            galleryView.classList.add('pop-animation');
+            
+            galleryContainer.innerHTML = '<p class="loading-text">Loading memories...</p>';
+
+            try {
+                // Fetch from Firestore 'gallery' collection
+                const querySnapshot = await getDocs(collection(db, "gallery"));
+                galleryContainer.innerHTML = ''; // Clear loading text
+
+                if (querySnapshot.empty) {
+                    galleryContainer.innerHTML = '<p>No pictures uploaded yet!</p>';
+                    return;
+                }
+
+                querySnapshot.forEach((doc) => {
+                    const data = doc.data();
+                    if(data.imageUrl) {
+                        const img = document.createElement('img');
+                        img.src = data.imageUrl;
+                        img.alt = "A beautiful memory";
+                        galleryContainer.appendChild(img);
+                    }
+                });
+            } catch (error) {
+                console.error("Error fetching images: ", error);
+                galleryContainer.innerHTML = '<p>Error loading pictures.</p>';
+            }
+        });
+    </script>
+</body>
+  </html>
