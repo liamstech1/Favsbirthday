@@ -33,6 +33,26 @@
         }
         .wish-input:focus { border-color: #d81b60; }
         
+        /* Password Toggle Wrapper */
+        .password-wrapper {
+            position: relative;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        .password-wrapper .wish-input {
+            margin-bottom: 0;
+            padding-right: 40px; /* Make room for the eye icon */
+        }
+        #toggle-password {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            font-size: 1.2rem;
+            user-select: none;
+        }
+
         button {
             background-color: #d81b60; color: white; border: none; padding: 15px 30px;
             font-size: 1.1rem; border-radius: 30px; cursor: pointer; font-weight: bold;
@@ -48,7 +68,7 @@
         .reset-btn:hover:not(:disabled) { background-color: #5a6268; }
 
         /* Views */
-        #cake-view, #success-view, #gallery-view, #game-view { display: none; }
+        #oven-view, #cake-view, #success-view, #gallery-view, #game-view { display: none; }
 
         /* Game Canvas */
         #game-canvas {
@@ -58,7 +78,7 @@
         }
         .falling-item { position: absolute; font-size: 35px; cursor: pointer; user-select: none; }
         .score-text { font-size: 1.2rem; font-weight: bold; color: #d81b60; margin-bottom: 5px; }
-        .milestone-msg { color: #ad144b; font-weight: 600; min-height: 24px; font-size: 1rem; margin-bottom: 15px; transition: opacity 0.3s; }
+        .milestone-msg { color: #ad144b; font-weight: 600; min-height: 48px; font-size: 1rem; margin-bottom: 15px; transition: opacity 0.3s; }
 
         /* Gallery Grid */
         .gallery-grid {
@@ -79,6 +99,11 @@
             font-weight: 500;
         }
 
+        /* Error Message */
+        .error-msg {
+            color: #dc3545; font-size: 0.9rem; margin-top: 10px; display: none; font-weight: bold;
+        }
+
         /* Animations */
         @keyframes popIn { 0% { transform: scale(0.8); opacity: 0; } 80% { transform: scale(1.05); opacity: 1; } 100% { transform: scale(1); } }
         .pop-animation { animation: popIn 0.6s forwards; }
@@ -95,7 +120,19 @@
 
     <div class="card-container">
         
-        <!-- Step 1: The Oven View -->
+        <div id="password-view">
+            <h1>Top Secret! 🔒</h1>
+            <p>This special delivery is securely locked. Please enter the password to unlock your surprise.</p>
+            
+            <div class="password-wrapper">
+                <input type="password" id="password-input" class="wish-input" placeholder="Enter password...">
+                <span id="toggle-password">👁️</span>
+            </div>
+            
+            <button id="unlock-btn">Unlock 🔓</button>
+            <p id="password-error" class="error-msg">Incorrect password, try again!</p>
+        </div>
+
         <div id="oven-view">
             <h1>Special Delivery!</h1>
             <p>I know you're the master baker around here, but I decided to try my hand at it today...</p>
@@ -103,7 +140,6 @@
             <button id="bake-btn">Open the Oven</button>
         </div>
 
-        <!-- Step 2: The Cake & Wish View -->
         <div id="cake-view">
             <h1>Happy Birthday!</h1>
             <div class="names">Kosisochukwu, Favour, Purity, Christabel<br>❤️ My Love ❤️</div>
@@ -113,26 +149,22 @@
             <button id="wish-btn">Blow out the candles! 🌬️</button>
         </div>
 
-        <!-- Step 3: Success View -->
         <div id="success-view">
             <h1>Wish Sent to the Stars! ✨</h1>
             <div class="emoji-display pop-animation">💌</div>
-            <p>Your wish has been securely locked in my database and my heart. Wishing you a year filled with sweetness, success, and all your dreams coming true!</p>
+            <p>Your wish has been securely locked in my heart. Wishing you a year filled with sweetness, success, and all your dreams coming true!</p>
             <button id="gallery-btn">See Our Memories 📸</button>
         </div>
 
-        <!-- Step 4: Gallery View -->
         <div id="gallery-view">
             <h1>Our Memories</h1>
             <p>A few moments of my favorite baker.</p>
             <div id="gallery-container" class="gallery-grid">
-                <!-- Images will load here -->
-            </div>
+                </div>
             
             <button id="start-game-btn" class="game-btn">I have one more surprise! 🎁</button>
         </div>
 
-        <!-- Step 5: Game View -->
         <div id="game-view">
             <h1>Catch My Heart!</h1>
             <p>Tap the falling hearts to collect love points!</p>
@@ -145,24 +177,19 @@
             <p style="font-size: 0.9rem; color: #888; margin-top: 15px;">(Music is playing! Turn up your volume 🎵)</p>
         </div>
         
-        <!-- Signature -->
         <div class="developer-tag">Developed by David Liam's</div>
 
-        <!-- CUSTOM AUDIO PLAYER (Hidden) -->
         <audio id="birthday-song" loop>
-            <!-- DR. DAVID: PASTE YOUR RAW GITHUB MP3 LINK IN THE SRC QUOTES BELOW -->
             <source src="nastelbom-happy-birthday-471481.mp3" type="audio/mpeg">
         </audio>
 
     </div>
 
-    <!-- Image Preview Modal -->
     <div id="image-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:1000; justify-content:center; align-items:center; padding:20px;">
         <img id="modal-img" style="max-width:100%; max-height:80vh; border-radius:10px; border:3px solid white;">
         <button onclick="document.getElementById('image-modal').style.display='none'" style="position:absolute; top:20px; right:20px; background:white; color:black; border:none; padding:10px; border-radius:50%; font-weight:bold; cursor:pointer;">✕</button>
     </div>
 
-    <!-- Firebase Script -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
         import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
@@ -181,11 +208,17 @@
         const db = getFirestore(app);
 
         // UI Elements
+        const passwordView = document.getElementById('password-view');
         const ovenView = document.getElementById('oven-view');
         const cakeView = document.getElementById('cake-view');
         const successView = document.getElementById('success-view');
         const galleryView = document.getElementById('gallery-view');
         const gameView = document.getElementById('game-view');
+        
+        const unlockBtn = document.getElementById('unlock-btn');
+        const passwordInput = document.getElementById('password-input');
+        const togglePassword = document.getElementById('toggle-password');
+        const passwordError = document.getElementById('password-error');
         
         const galleryContainer = document.getElementById('gallery-container');
         const bakeBtn = document.getElementById('bake-btn');
@@ -203,6 +236,34 @@
         
         let score = 0;
         let gameInterval;
+
+        // 0. Password Unlock & Toggle Logic
+        const SECRET_PASSWORD = "kosisochukwu";
+
+        // Toggle visibility of the password
+        togglePassword.addEventListener('click', () => {
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            togglePassword.innerText = type === 'password' ? '👁️' : '🙈';
+        });
+
+        unlockBtn.addEventListener('click', () => {
+            const enteredPassword = passwordInput.value.trim().toLowerCase();
+            if (enteredPassword === SECRET_PASSWORD) {
+                passwordView.style.display = 'none';
+                ovenView.style.display = 'block';
+                ovenView.classList.add('pop-animation');
+            } else {
+                passwordError.style.display = 'block';
+            }
+        });
+
+        // Add "Enter" key support for the password input
+        passwordInput.addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                unlockBtn.click();
+            }
+        });
 
         // 1. Oven to Cake (AND PLAY MUSIC!)
         bakeBtn.addEventListener('click', () => {
@@ -287,7 +348,7 @@
             startGameLoop();
         });
 
-        // Game Logic Function
+        // Game Logic Function with Expanded Milestones
         function startGameLoop() {
             if(gameInterval) clearInterval(gameInterval);
             
@@ -304,13 +365,20 @@
                     scoreDisplay.innerText = score;
                     heart.remove();
                     
-                    if (score === 30) {
-                        milestoneMsg.innerText = "You're catching my heart! 💘";
-                    } else if (score === 60) {
-                        milestoneMsg.innerText = "My favorite baker is a pro! 🎮❤️";
-                    } else if (score === 100) {
-                        milestoneMsg.innerText = "You win! My heart is completely yours! 💖🍰";
-                    }
+                    // Grand Milestone Messages up to 1000
+                    if (score === 30) { milestoneMsg.innerText = "You're catching my heart! 💘"; }
+                    else if (score === 60) { milestoneMsg.innerText = "My favorite baker is a pro! 🎮❤️"; }
+                    else if (score === 100) { milestoneMsg.innerText = "Wow! 100 points of pure love! 💖🍰"; }
+                    else if (score === 150) { milestoneMsg.innerText = "You're sweeter than frosting! 🧁"; }
+                    else if (score === 200) { milestoneMsg.innerText = "My heart beats like a whisk! 🥄❤️"; }
+                    else if (score === 300) { milestoneMsg.innerText = "A perfect batch of love! 🍪"; }
+                    else if (score === 400) { milestoneMsg.innerText = "Things are heating up in the oven! 🔥"; }
+                    else if (score === 500) { milestoneMsg.innerText = "500 points! Halfway to infinity! 🌌"; }
+                    else if (score === 600) { milestoneMsg.innerText = "You're the icing on my cake! 🎂"; }
+                    else if (score === 700) { milestoneMsg.innerText = "I can't catch enough of your love! 🥰"; }
+                    else if (score === 800) { milestoneMsg.innerText = "More precious than the finest recipe! 📜"; }
+                    else if (score === 900) { milestoneMsg.innerText = "Almost at the top tier of the cake! 🏰"; }
+                    else if (score === 1000) { milestoneMsg.innerText = "1000 points! You've completely stolen my heart forever! 🏆💖💍"; }
                 };
 
                 let pos = -40;
